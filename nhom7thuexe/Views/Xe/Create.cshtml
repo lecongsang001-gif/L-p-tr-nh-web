@@ -1,0 +1,59 @@
+﻿@model nhom7thuexe.Models.Xe
+
+@{
+    ViewData["Title"] = "Thêm xe mới";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2>Thêm Xe Mới</h2>
+    <form asp-action="Create" method="post" class="mt-3">
+        <div class="mb-3">
+            <label asp-for="MaXe" class="form-label">Mã Xe (Ví dụ: XE01, XE02)</label>
+            <input asp-for="MaXe" class="form-control" required />
+            <span asp-validation-for="MaXe" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="TenXe" class="form-label">Tên Xe</label>
+            <input asp-for="TenXe" class="form-control" required />
+            <span asp-validation-for="TenXe" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="TenHang" class="form-label">Tên Hãng</label>
+                <input asp-for="TenHang" class="form-control" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="LoaiXeMay" class="form-label">Loại Xe</label>
+                <input asp-for="LoaiXeMay" class="form-control" placeholder="Tay ga, Xe số..." required />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label asp-for="PhanKhoi" class="form-label">Phân Khối (cc)</label>
+                <input asp-for="PhanKhoi" type="number" class="form-control" required />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label asp-for="NamSanXuat" class="form-label">Năm Sản Xuất</label>
+                <input asp-for="NamSanXuat" type="number" class="form-control" />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label asp-for="MauSac" class="form-label">Màu Sắc</label>
+                <input asp-for="MauSac" class="form-control" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="HinhAnh" class="form-label">Đường dẫn Hình Ảnh (URL)</label>
+            <input asp-for="HinhAnh" class="form-control" placeholder="/images/xe.jpg" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="TrangThai" class="form-label">Trạng Thái</label>
+            <select asp-for="TrangThai" class="form-select">
+                <option value="Sẵn sàng">Sẵn sàng</option>
+                <option value="Đang cho thuê">Đang cho thuê</option>
+                <option value="Bảo trì">Bảo trì</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Lưu lại</button>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<nhom7thuexe.Models.Xe>
+
+@{
+    ViewData["Title"] = "Quản lý danh sách xe";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh Sách Xe</h2>
+        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Thêm xe mới</a>
+    </div>
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã Xe</th>
+                <th>Hình ảnh</th>
+                <th>Tên Xe</th>
+                <th>Tên Hãng</th>
+                <th>Loại Xe</th>
+                <th>Phân Khối</th>
+                <th>Năm SX</th>
+                <th>Màu Sắc</th>
+                <th>Trạng Thái</th>
+                <th class="text-center">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.MaXe</strong></td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="@item.HinhAnh" alt="@item.TenXe" style="width: 80px; height: 50px; object-fit: cover;" class="rounded" />
+                        }
+                    </td>
+                    <td>@item.TenXe</td>
+                    <td>@item.TenHang</td>
+                    <td>@item.LoaiXeMay</td>
+                    <td>@item.PhanKhoi cc</td>
+                    <td>@item.NamSanXuat</td>
+                    <td>@item.MauSac</td>
+                    <td>
+                        <span class="badge @(item.TrangThai == "Sẵn sàng" ? "bg-success" : "bg-secondary")">
+                            @item.TrangThai
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.MaXe" class="btn btn-sm btn-warning">Sửa</a>
+                        
+                        <form asp-action="Delete" asp-route-id="@item.MaXe" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa xe này?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
