@@ -1,0 +1,59 @@
+﻿@model List<NhomXeViewModel>
+@{
+    ViewData["Title"] = "Bảng giá";
+}
+
+<section class="container mt-section">
+    <h1 class="mt-page-title">Bảng giá thuê xe</h1>
+    <p class="mt-lead">Giá theo từng xe, tính theo ngày, tuần hoặc tháng. Giá cuối cùng được nhân viên xác nhận khi chốt đơn.</p>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Hiện chưa có bảng giá.</div>
+    }
+
+    @foreach (var nhom in Model)
+    {
+        <h2 class="mt-group-title">@nhom.LoaiXeMay</h2>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle mt-table">
+                <thead>
+                    <tr>
+                        <th>Xe</th>
+                        <th class="text-end">Theo ngày</th>
+                        <th class="text-end">Theo tuần</th>
+                        <th class="text-end">Theo tháng</th>
+                        <th class="text-end">Tiền cọc</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var xe in nhom.Xes)
+                    {
+                        var thongSo = xe.TenHang + (xe.PhanKhoi > 0 ? " • " + xe.PhanKhoi + "cc" : "");
+                        <tr>
+                            <td>
+                                <strong>@xe.TenXe</strong>
+                                <div class="small text-muted">@thongSo</div>
+                            </td>
+                            <td class="text-end">@ViewHelper.Tien(xe.GiaTheoNgay)</td>
+                            <td class="text-end">@ViewHelper.Tien(xe.GiaTheoTuan)</td>
+                            <td class="text-end">@ViewHelper.Tien(xe.GiaTheoThang)</td>
+                            <td class="text-end">@ViewHelper.Tien(xe.TienCoc)</td>
+                            <td class="text-center">
+                                @if (xe.SanSang)
+                                {
+                                    <a class="btn btn-sm mt-btn-dangky" asp-controller="ThueXe" asp-action="DangKy" asp-route-maXe="@xe.MaXe">Đăng ký</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Tạm hết xe</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

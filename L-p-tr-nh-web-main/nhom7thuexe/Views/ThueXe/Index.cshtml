@@ -1,0 +1,39 @@
+@model List<NhomXeViewModel>
+@{
+    ViewData["Title"] = "Thuê xe máy";
+    var loaiDangLoc = (ViewData["Loai"] as string)?.Trim();
+    var tatCaLoai = ViewData["TatCaLoai"] as List<string> ?? new List<string>();
+}
+
+<section class="container mt-section">
+    <h1 class="mt-page-title">Thuê xe máy</h1>
+    <p class="mt-lead">Chọn xe phù hợp và bấm <strong>ĐĂNG KÝ NGAY</strong>. Giá thuê khác nhau tùy theo thuê theo ngày, tuần hoặc tháng.</p>
+
+    @if (tatCaLoai.Count > 1)
+    {
+        <nav class="mt-filter" aria-label="Lọc theo loại xe">
+            <a class="mt-chip@(string.IsNullOrWhiteSpace(loaiDangLoc) ? " active" : "")" asp-controller="ThueXe" asp-action="Index">Tất cả</a>
+            @foreach (var loai in tatCaLoai)
+            {
+                var dangChon = string.Equals(loai, loaiDangLoc, StringComparison.OrdinalIgnoreCase);
+                <a class="mt-chip@(dangChon ? " active" : "")" asp-controller="ThueXe" asp-action="Index" asp-route-loai="@loai">@loai</a>
+            }
+        </nav>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Hiện chưa có xe nào để hiển thị.</div>
+    }
+
+    @foreach (var nhom in Model)
+    {
+        <h2 class="mt-group-title">@nhom.LoaiXeMay</h2>
+        <div class="row g-4">
+            @foreach (var xe in nhom.Xes)
+            {
+                <partial name="_XeCard" model="xe" />
+            }
+        </div>
+    }
+</section>

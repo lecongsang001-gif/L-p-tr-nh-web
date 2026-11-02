@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Liên hệ";
+    var site = SiteOptions.Value;
+}
+
+<section class="container mt-section">
+    <h1 class="mt-page-title">Liên hệ</h1>
+    <p class="mt-lead">Bạn cần tư vấn chọn xe hoặc hỗ trợ về đơn thuê? Hãy liên hệ với chúng tôi theo thông tin dưới đây.</p>
+
+    <ul class="mt-contact-list">
+        @if (!string.IsNullOrWhiteSpace(site.Hotline))
+        {
+            <li><small>Hotline</small><a href="tel:@site.HotlineTel">@site.Hotline</a></li>
+        }
+        @if (!string.IsNullOrWhiteSpace(site.Email))
+        {
+            <li><small>Email</small><a href="mailto:@site.Email">@site.Email</a></li>
+        }
+        @if (!string.IsNullOrWhiteSpace(site.DiaChi))
+        {
+            <li><small>Địa chỉ</small><span>@site.DiaChi</span></li>
+        }
+        @if (!string.IsNullOrWhiteSpace(site.GioLamViec))
+        {
+            <li><small>Giờ làm việc</small><span>@site.GioLamViec</span></li>
+        }
+    </ul>
+
+    <a class="btn mt-btn-dangky" asp-controller="ThueXe" asp-action="Index">Đăng ký thuê xe</a>
+</section>

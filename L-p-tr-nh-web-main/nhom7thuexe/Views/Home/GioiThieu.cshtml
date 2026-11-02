@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Giới thiệu";
+    var site = SiteOptions.Value;
+    var brand = string.IsNullOrWhiteSpace(site.TenThuongHieu) ? "MOTOTRIP" : site.TenThuongHieu;
+}
+
+@* Nội dung bên dưới là bản mẫu, hãy sửa lại cho đúng với cửa hàng của bạn. *@
+<section class="container mt-section">
+    <h1 class="mt-page-title">Giới thiệu @brand</h1>
+    <p class="mt-lead">
+        @brand cho thuê xe máy theo ngày, tuần và tháng. Danh sách xe, tình trạng xe và giá thuê
+        trên website được cập nhật từ hệ thống quản lý của chúng tôi.
+    </p>
+
+    <div class="mt-info-grid">
+        <div class="mt-info-item">
+            <h3>Giá rõ ràng</h3>
+            <p>Giá thuê theo ngày, tuần, tháng và tiền cọc được hiển thị ngay trên trang Bảng giá.</p>
+        </div>
+        <div class="mt-info-item">
+            <h3>Đăng ký trực tuyến</h3>
+            <p>Chọn xe, điền thông tin và gửi đăng ký ngay trên website.</p>
+        </div>
+        <div class="mt-info-item">
+            <h3>Nhân viên xác nhận</h3>
+            <p>Mỗi đơn đăng ký được nhân viên liên hệ để xác nhận thông tin và giá cuối cùng.</p>
+        </div>
+    </div>
+
+    <a class="btn mt-btn-dangky" asp-controller="ThueXe" asp-action="Index">Xem xe cho thuê</a>
+    <a class="btn mt-btn-outline ms-2" asp-controller="Home" asp-action="LienHe">Liên hệ</a>
+</section>

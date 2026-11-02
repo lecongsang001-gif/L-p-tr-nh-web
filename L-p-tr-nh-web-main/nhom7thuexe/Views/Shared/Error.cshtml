@@ -1,0 +1,28 @@
+@model ErrorViewModel
+@{
+    var code = ViewData["Code"] is int c ? c : 500;
+    var khongTimThay = code == 404;
+    ViewData["Title"] = khongTimThay ? "Không tìm thấy trang" : "Có lỗi xảy ra";
+}
+
+<section class="container mt-section">
+    <div class="mt-error">
+        <div class="mt-error-code">@code</div>
+        <h1 class="mt-page-title mt-3">@ViewData["Title"]</h1>
+        <p class="mt-lead mx-auto">
+            @if (khongTimThay)
+            {
+                <text>Trang bạn tìm không tồn tại hoặc đã được chuyển đi nơi khác.</text>
+            }
+            else
+            {
+                <text>Hệ thống gặp sự cố khi xử lý yêu cầu. Vui lòng thử lại sau hoặc liên hệ hotline.</text>
+            }
+        </p>
+        @if (Model.ShowRequestId)
+        {
+            <p class="small text-muted">Mã yêu cầu: <code>@Model.RequestId</code></p>
+        }
+        <a class="btn mt-btn-dangky" asp-controller="Home" asp-action="Index">Về trang chủ</a>
+    </div>
+</section>

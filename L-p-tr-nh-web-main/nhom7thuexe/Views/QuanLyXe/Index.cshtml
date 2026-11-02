@@ -1,0 +1,92 @@
+@using nhom7thuexe.Helpers
+@using nhom7thuexe.ViewModels
+@model List<XeCardViewModel>
+@{
+    ViewData["Title"] = "Quản lý xe";
+    var q = ViewData["Q"] as string;
+}
+
+<section class="container mt-section">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 class="mt-page-title mb-0">Quản lý xe</h1>
+        <a class="btn btn-primary" asp-controller="QuanLyXe" asp-action="Them">+ Thêm xe</a>
+    </div>
+
+    @if (TempData["ThongBao"] is string tb)
+    {
+        <div class="alert alert-success">@tb</div>
+    }
+    @if (TempData["Loi"] is string loi)
+    {
+        <div class="alert alert-danger">@loi</div>
+    }
+
+    <form method="get" asp-controller="QuanLyXe" asp-action="Index" class="row g-2 mb-3">
+        <div class="col-sm-6 col-md-4">
+            <input type="search" name="q" value="@q" class="form-control" placeholder="Tìm theo mã, tên, hãng, loại xe..." />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-secondary">Tìm</button>
+            @if (!string.IsNullOrWhiteSpace(q))
+            {
+                <a class="btn btn-link" asp-controller="QuanLyXe" asp-action="Index">Xóa lọc</a>
+            }
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Không có xe nào.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Mã</th>
+                        <th>Xe</th>
+                        <th>Loại</th>
+                        <th class="text-end">Giá/ngày</th>
+                        <th class="text-end">Tiền cọc</th>
+                        <th>Trạng thái</th>
+                        <th style="width:160px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var xe in Model)
+                    {
+                        var badge = xe.SanSang ? "bg-success"
+                                  : string.Equals(xe.TrangThai?.Trim(), "Bảo trì", StringComparison.OrdinalIgnoreCase) ? "bg-warning text-dark"
+                                  : "bg-secondary";
+                        <tr>
+                            <td style="width:90px">
+                                <img src="@ViewHelper.HinhXe(xe.HinhAnh)" alt="@xe.TenXe" class="img-fluid rounded" style="max-height:56px" />
+                            </td>
+                            <td>@xe.MaXe</td>
+                            <td>
+                                <strong>@xe.TenXe</strong>
+                                <div class="small text-muted">@xe.TenHang@(xe.PhanKhoi > 0 ? " • " + xe.PhanKhoi + "cc" : "")@(string.IsNullOrWhiteSpace(xe.MauSac) ? "" : " • " + xe.MauSac)</div>
+                            </td>
+                            <td>@xe.LoaiXeMay</td>
+                            <td class="text-end">@ViewHelper.Tien(xe.GiaTheoNgay)</td>
+                            <td class="text-end">@ViewHelper.Tien(xe.TienCoc)</td>
+                            <td><span class="badge @badge">@(xe.TrangThai ?? "—")</span></td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a class="btn btn-sm btn-outline-primary" asp-controller="QuanLyXe" asp-action="Sua" asp-route-maXe="@xe.MaXe">Sửa</a>
+                                    <form method="post" asp-controller="QuanLyXe" asp-action="Xoa" asp-route-maXe="@xe.MaXe"
+                                          onsubmit="return confirm('Bạn có chắc muốn xóa xe này? Thao tác không thể hoàn tác.');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p class="text-muted small">Tổng: @Model.Count xe</p>
+    }
+</section>

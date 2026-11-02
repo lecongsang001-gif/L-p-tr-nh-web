@@ -1,0 +1,10 @@
+﻿@{
+    var tieuDe = ViewData["TieuDe"] as string ?? "Blog";
+    ViewData["Title"] = tieuDe;
+}
+
+<section class="container mt-section">
+    <h1 class="mt-page-title">@tieuDe</h1>
+    <p>Chuyên mục này đang được cập nhật. Vui lòng quay lại sau.</p>
+    <a class="btn mt-btn-outline" asp-controller="Home" asp-action="Index">Về trang chủ</a>
+</section>

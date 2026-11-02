@@ -1,0 +1,128 @@
+@{
+    var site = SiteOptions.Value;
+    var brand = string.IsNullOrWhiteSpace(site.TenThuongHieu) ? "MOTOTRIP" : site.TenThuongHieu;
+
+    // Xác định mục menu đang mở để tô màu cam
+    var ctrl = (ViewContext.RouteData.Values["controller"] as string ?? "").ToLowerInvariant();
+    var act = (ViewContext.RouteData.Values["action"] as string ?? "").ToLowerInvariant();
+    var isHome = ctrl == "home" && act == "index";
+    var isGioiThieu = ctrl == "home" && act == "gioithieu";
+    var isThueXe = ctrl == "thuexe";
+    var isBangGia = ctrl == "banggia";
+    var isBlog = ctrl == "blog";
+    var isLienHe = ctrl == "home" && act == "lienhe";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @brand</title>
+    <meta name="description" content="@brand - cho thuê xe máy theo ngày, tuần, tháng. Xem xe, bảng giá và đăng ký thuê xe trực tuyến." />
+    <link rel="icon" type="image/svg+xml" href="~/images/logo-icon.jpg" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="mt-header">
+        <nav class="navbar navbar-expand-lg" aria-label="Menu chính">
+            <div class="container">
+                <a class="mt-logo" asp-controller="Home" asp-action="Index" aria-label="@brand - trang chủ">
+                    <img src="~/images/logo-icon.ipg" alt="" />
+                    <span class="mt-logo-text">@brand</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mtMenu"
+                        aria-controls="mtMenu" aria-expanded="false" aria-label="Mở menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mtMenu">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link@(isHome ? " active" : "")" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link@(isGioiThieu ? " active" : "")" asp-controller="Home" asp-action="GioiThieu">Giới thiệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link@(isThueXe ? " active" : "")" asp-controller="ThueXe" asp-action="Index">Thuê Xe Máy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link@(isBangGia ? " active" : "")" asp-controller="BangGia" asp-action="Index">Bảng giá</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle@(isBlog ? " active" : "")" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Blog" asp-action="Index" asp-route-muc="kinh-nghiem">Kinh nghiệm thuê xe</a></li>
+                                <li><a class="dropdown-item" asp-controller="Blog" asp-action="Index" asp-route-muc="tin-tuc">Tin tức</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link@(isLienHe ? " active" : "")" asp-controller="Home" asp-action="LienHe">Liên hệ</a>
+                        </li>
+                        @if (!string.IsNullOrWhiteSpace(site.Hotline))
+                        {
+                            <li class="nav-item ms-lg-3">
+                                <a class="mt-hotline" href="tel:@site.HotlineTel">Hotline: @site.Hotline</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="mt-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <div class="mt-footer-brand">@brand</div>
+                    <p class="mb-0">Cho thuê xe máy theo ngày, tuần và tháng.</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="mt-footer-title">Liên kết</h2>
+                    <ul>
+                        <li><a asp-controller="ThueXe" asp-action="Index">Thuê xe máy</a></li>
+                        <li><a asp-controller="BangGia" asp-action="Index">Bảng giá</a></li>
+                        <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                        <li><a asp-controller="Home" asp-action="LienHe">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4">
+                    <h2 class="mt-footer-title">Liên hệ</h2>
+                    <ul>
+                        @if (!string.IsNullOrWhiteSpace(site.Hotline))
+                        {
+                            <li>Hotline: <a href="tel:@site.HotlineTel">@site.Hotline</a></li>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(site.Email))
+                        {
+                            <li><a href="mailto:@site.Email">@site.Email</a></li>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(site.DiaChi))
+                        {
+                            <li>@site.DiaChi</li>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(site.GioLamViec))
+                        {
+                            <li>@site.GioLamViec</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-footer-copy">&copy; @DateTime.Now.Year @brand. Bảo lưu mọi quyền.</div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,27 @@
+﻿@model DangKyThanhCongViewModel
+@{
+    ViewData["Title"] = "Đăng ký thành công";
+    var site = SiteOptions.Value;
+}
+
+<section class="container mt-section">
+    <div class="mt-success text-center">
+        <h1 class="mt-page-title">Đăng ký thành công!</h1>
+        <p class="mt-lead">Cảm ơn <strong>@Model.HoTen</strong>, chúng tôi đã nhận được đơn thuê xe của bạn.</p>
+
+        <div class="mt-benefit text-start d-inline-block">
+            <p class="mb-1">Mã đơn: <strong>@Model.MaDon</strong></p>
+            <p class="mb-1">Xe: <strong>@Model.TenXe</strong></p>
+            <p class="mb-1">Nhận xe: @Model.NgayNhan &rarr; Trả xe: @Model.NgayTra</p>
+            <p class="mb-0">Tạm tính: <strong>@Model.TongTien</strong></p>
+        </div>
+
+        <p class="mt-3">Nhân viên sẽ liên hệ xác nhận đơn trong thời gian sớm nhất.
+            @if (!string.IsNullOrWhiteSpace(site.Hotline))
+            {
+                <text>Cần hỗ trợ gấp, gọi <a href="tel:@site.HotlineTel">@site.Hotline</a>.</text>
+            }
+        </p>
+        <a class="btn mt-btn-outline" asp-controller="Home" asp-action="Index">Về trang chủ</a>
+    </div>
+</section>

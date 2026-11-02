@@ -1,0 +1,102 @@
+@using nhom7thuexe.Helpers
+@using nhom7thuexe.ViewModels
+@model XeFormViewModel
+@{
+    ViewData["Title"] = Model.LaThem ? "Thêm xe" : "Sửa xe";
+}
+
+<section class="container mt-section">
+    <h1 class="mt-page-title">@(Model.LaThem ? "Thêm xe mới" : "Sửa xe " + Model.MaXe)</h1>
+
+    <form method="post" enctype="multipart/form-data"
+          asp-controller="QuanLyXe"
+          asp-action="@(Model.LaThem ? "Them" : "Sua")"
+          asp-route-maXe="@(Model.LaThem ? null : Model.MaXe)">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <h2 class="h5 mt-3">Thông tin xe</h2>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label asp-for="MaXe" class="form-label"></label>
+                <input asp-for="MaXe" class="form-control" readonly="@(!Model.LaThem)" />
+                <span asp-validation-for="MaXe" class="text-danger small"></span>
+            </div>
+            <div class="col-md-8">
+                <label asp-for="TenXe" class="form-label"></label>
+                <input asp-for="TenXe" class="form-control" />
+                <span asp-validation-for="TenXe" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="TenHang" class="form-label"></label>
+                <input asp-for="TenHang" class="form-control" />
+                <span asp-validation-for="TenHang" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="LoaiXeMay" class="form-label"></label>
+                <select asp-for="LoaiXeMay" asp-items="@(new SelectList(XeFormViewModel.LoaiXeOptions))" class="form-select"></select>
+                <span asp-validation-for="LoaiXeMay" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="PhanKhoi" class="form-label"></label>
+                <input asp-for="PhanKhoi" type="number" min="0" max="2000" class="form-control" />
+                <span asp-validation-for="PhanKhoi" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="MauSac" class="form-label"></label>
+                <input asp-for="MauSac" class="form-control" />
+                <span asp-validation-for="MauSac" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="TrangThai" class="form-label"></label>
+                <select asp-for="TrangThai" asp-items="@(new SelectList(XeFormViewModel.TrangThaiOptions))" class="form-select"></select>
+                <span asp-validation-for="TrangThai" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <h2 class="h5 mt-4">Giá đang áp dụng</h2>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label asp-for="GiaTheoNgay" class="form-label"></label>
+                <input asp-for="GiaTheoNgay" type="number" min="0" step="1000" class="form-control" />
+                <span asp-validation-for="GiaTheoNgay" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="GiaTheoTuan" class="form-label"></label>
+                <input asp-for="GiaTheoTuan" type="number" min="0" step="1000" class="form-control" />
+                <span asp-validation-for="GiaTheoTuan" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="GiaTheoThang" class="form-label"></label>
+                <input asp-for="GiaTheoThang" type="number" min="0" step="1000" class="form-control" />
+                <span asp-validation-for="GiaTheoThang" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="TienCoc" class="form-label"></label>
+                <input asp-for="TienCoc" type="number" min="0" step="1000" class="form-control" />
+                <span asp-validation-for="TienCoc" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <h2 class="h5 mt-4">Ảnh xe</h2>
+        <div class="row g-3 align-items-center">
+            @if (!Model.LaThem)
+            {
+                <div class="col-auto">
+                    <img src="@ViewHelper.HinhXe(Model.HinhAnh)" alt="Ảnh hiện tại" class="img-fluid rounded" style="max-height:90px" />
+                </div>
+            }
+            <div class="col">
+                <input asp-for="FileAnh" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" />
+                <div class="form-text">
+                    @(Model.LaThem ? "Không bắt buộc." : "Bỏ trống nếu giữ ảnh hiện tại.") Định dạng jpg, png, webp; tối đa 2 MB.
+                </div>
+                <span asp-validation-for="FileAnh" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">@(Model.LaThem ? "Thêm xe" : "Lưu thay đổi")</button>
+            <a class="btn btn-outline-secondary" asp-controller="QuanLyXe" asp-action="Index">Hủy</a>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,47 @@
+@model XeCardViewModel
+@{
+    var coGia = Model.GiaTheoNgay.HasValue && Model.GiaTheoNgay.Value > 0;
+    var thongSo = Model.TenHang
+        + (Model.PhanKhoi > 0 ? " - " + Model.PhanKhoi + " cc" : "")
+        + (string.IsNullOrWhiteSpace(Model.MauSac) ? "" : " - " + Model.MauSac);
+}
+
+<div class="col-12 col-sm-6 col-lg-4 d-flex">
+    <article class="mt-xe-card">
+        <div class="mt-xe-img">
+            <img src="@ViewHelper.HinhXe(Model.HinhAnh)" alt="@Model.TenXe" loading="lazy" />
+        </div>
+        <h3 class="mt-xe-name">@Model.TenXe</h3>
+        <p class="mt-xe-price">
+            @if (coGia)
+            {
+                <text>Từ @ViewHelper.Tien(Model.GiaTheoNgay)/ngày</text>
+            }
+            else
+            {
+                <text>Giá: Liên hệ</text>
+            }
+        </p>
+        <ul class="mt-xe-desc">
+            <li>@thongSo</li>
+            @if (Model.GiaTheoTuan.HasValue && Model.GiaTheoTuan.Value > 0)
+            {
+                <li>Thuê tuần: @ViewHelper.Tien(Model.GiaTheoTuan)</li>
+            }
+            @if (Model.GiaTheoThang.HasValue && Model.GiaTheoThang.Value > 0)
+            {
+                <li>Thuê tháng: @ViewHelper.Tien(Model.GiaTheoThang)</li>
+            }
+        </ul>
+        <div class="mt-xe-action">
+            @if (Model.SanSang)
+            {
+                <a class="btn mt-btn-dangky" asp-controller="ThueXe" asp-action="DangKy" asp-route-maXe="@Model.MaXe">Đăng ký ngay</a>
+            }
+            else
+            {
+                <span class="mt-btn-off">@(string.IsNullOrWhiteSpace(Model.TrangThai) ? "Tạm hết xe" : Model.TrangThai)</span>
+            }
+        </div>
+    </article>
+</div>

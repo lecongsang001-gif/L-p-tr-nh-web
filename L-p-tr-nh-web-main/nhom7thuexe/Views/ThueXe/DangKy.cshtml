@@ -1,0 +1,125 @@
+﻿@model DangKyThueXeViewModel
+@{
+    ViewData["Title"] = "Đăng ký thuê xe";
+    var xe = Model.Xe!;
+    var homNay = DateTime.Today.ToString("yyyy-MM-dd");
+    var coGia = xe.GiaTheoNgay.HasValue && xe.GiaTheoNgay.Value > 0;
+}
+
+<section class="container mt-section">
+    <h1 class="mt-page-title">Đăng ký thuê xe</h1>
+
+    <div class="row g-4">
+        @* Thông tin xe đã chọn *@
+        <div class="col-lg-4">
+            <div class="mt-xe-card">
+                <div class="mt-xe-img">
+                    <img src="@ViewHelper.HinhXe(xe.HinhAnh)" alt="@xe.TenXe" />
+                </div>
+                <h3 class="mt-xe-name">@xe.TenXe</h3>
+                <p class="mt-xe-price">
+                    @if (coGia)
+                    {
+                        <text>Từ @ViewHelper.Tien(xe.GiaTheoNgay)/ngày</text>
+                    }
+                    else
+                    {
+                        <text>Giá: Liên hệ</text>
+                    }
+                </p>
+                <ul class="list-unstyled mt-xe-desc mb-0">
+                    <li>Hãng: @xe.TenHang</li>
+                    <li>Loại xe: @xe.LoaiXeMay</li>
+                    @if (xe.PhanKhoi > 0)
+                    {
+                        <li>Phân khối: @xe.PhanKhoi cc</li>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(xe.MauSac))
+                    {
+                        <li>Màu sắc: @xe.MauSac</li>
+                    }
+                    <li>Tiền cọc: @ViewHelper.Tien(xe.TienCoc)</li>
+                </ul>
+                <div class="mt-xe-action">
+                    <a asp-controller="ThueXe" asp-action="Index">&larr; Chọn xe khác</a>
+                </div>
+            </div>
+        </div>
+
+        @* Form đăng ký *@
+        <div class="col-lg-8">
+            <form asp-action="DangKy" method="post" class="mt-form" novalidate>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="MaXe" />
+
+                <h2 class="mt-form-title">Thông tin khách hàng</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="HoTen" class="form-label"></label>
+                        <input asp-for="HoTen" class="form-control" autocomplete="name" />
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Sdt" class="form-label"></label>
+                        <input asp-for="Sdt" class="form-control" inputmode="numeric" autocomplete="tel" placeholder="0985977793" />
+                        <span asp-validation-for="Sdt" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" type="email" class="form-control" autocomplete="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Cccd" class="form-label"></label>
+                        <input asp-for="Cccd" class="form-control" inputmode="numeric" maxlength="12" placeholder="12 chữ số" />
+                        <span asp-validation-for="Cccd" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DiaChi" class="form-label"></label>
+                    <input asp-for="DiaChi" class="form-control" autocomplete="street-address" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-4">
+                    <input asp-for="CoGplx" class="form-check-input" />
+                    <label asp-for="CoGplx" class="form-check-label"></label>
+                </div>
+
+                <h2 class="mt-form-title">Thời gian &amp; địa điểm</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NgayNhan" class="form-label"></label>
+                        <input asp-for="NgayNhan" class="form-control" min="@homNay" />
+                        <span asp-validation-for="NgayNhan" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NgayTra" class="form-label"></label>
+                        <input asp-for="NgayTra" class="form-control" min="@homNay" />
+                        <span asp-validation-for="NgayTra" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DiaDiemGiaoXe" class="form-label"></label>
+                        <input asp-for="DiaDiemGiaoXe" class="form-control" placeholder="Để trống nếu nhận tại cửa hàng" />
+                        <span asp-validation-for="DiaDiemGiaoXe" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DiaDiemTraXe" class="form-label"></label>
+                        <input asp-for="DiaDiemTraXe" class="form-control" placeholder="Để trống nếu trả tại cửa hàng" />
+                        <span asp-validation-for="DiaDiemTraXe" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <p class="small text-muted">Giá thuê tạm tính theo giá ngày. Nhân viên sẽ liên hệ xác nhận đơn và giá cuối cùng.</p>
+                <button type="submit" class="btn mt-btn-dangky btn-lg">GỬI ĐĂNG KÝ</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

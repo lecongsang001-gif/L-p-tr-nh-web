@@ -1,0 +1,74 @@
+@model HomeIndexViewModel
+@{
+    ViewData["Title"] = "Thuê xe máy theo ngày, tuần, tháng";
+}
+
+<section class="mt-hero">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <h1>Thuê xe máy theo ngày, tuần hoặc tháng</h1>
+                <p>Chọn xe, bấm <strong>ĐĂNG KÝ NGAY</strong> và để lại thông tin. Nhân viên sẽ liên hệ xác nhận đơn cho bạn.</p>
+                <div class="mt-hero-actions">
+                    <a class="btn mt-btn-dangky btn-lg" asp-controller="ThueXe" asp-action="Index">Xem xe cho thuê</a>
+                    <a class="btn mt-btn-outline btn-lg" asp-controller="BangGia" asp-action="Index">Xem bảng giá</a>
+                </div>
+            </div>
+            @if (Model.LoaiXe.Any())
+            {
+                <div class="col-lg-5">
+                    <div class="mt-hero-panel">
+                        <h2>Chọn loại xe</h2>
+                        <ul>
+                            @foreach (var loai in Model.LoaiXe)
+                            {
+                                <li><a asp-controller="ThueXe" asp-action="Index" asp-route-loai="@loai">@loai</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="container mt-section">
+    <h2 class="mt-group-title">Xe nổi bật</h2>
+
+    @if (!Model.XeNoiBat.Any())
+    {
+        <div class="alert alert-info">Hiện chưa có xe nào sẵn sàng để hiển thị.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var xe in Model.XeNoiBat)
+            {
+                <partial name="_XeCard" model="xe" />
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a class="btn mt-btn-outline" asp-controller="ThueXe" asp-action="Index">Xem tất cả xe</a>
+        </div>
+    }
+</section>
+
+<section class="mt-steps">
+    <div class="container">
+        <h2 class="mt-group-title mt-0">Thuê xe trong 3 bước</h2>
+        <ol class="mt-steps-list">
+            <li>
+                <strong>Chọn xe</strong>
+                <span>Xem xe và giá thuê theo ngày, tuần, tháng.</span>
+            </li>
+            <li>
+                <strong>Điền thông tin</strong>
+                <span>Nhập họ tên, số điện thoại, CCCD, ngày nhận và ngày trả xe.</span>
+            </li>
+            <li>
+                <strong>Chờ xác nhận</strong>
+                <span>Nhân viên liên hệ xác nhận đơn và giá cuối cùng.</span>
+            </li>
+        </ol>
+    </div>
+</section>
